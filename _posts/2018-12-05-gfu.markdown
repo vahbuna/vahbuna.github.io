@@ -2,9 +2,9 @@
 layout: post
 title:  "Universal Function Approximator"
 date:   2018-12-05
-categories: ml pytorch tensorflow neuralnet
+categories: nn 
 ---
 
 [Read more][ufa-link] 
 
-[ufa-link]: {url}/ufa
+[ufa-link]: https://vahbuna.github.io/ufa
