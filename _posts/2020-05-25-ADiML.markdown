@@ -1,0 +1,74 @@
+---
+layout: post
+title: "Baydin et al. 2018. Automatic Differentiationin Machine Learning: a Survey"
+date:   2020-05-25
+category: paper 
+tag: automatic differentiation
+---
+
+[Paper](https://arxiv.org/abs/1502.05767)
+
+## Key Phrases
+
+Page 2
+>  computation of derivatives in computer programs can be classified into :
+> 1. manually working out derivatives and coding them;
+> 2. numerical differentiation using finite difference approximations;
+> 3. symbolic differentiation using expression manipulation in computer algebra systems; and
+> 4. automatic differentiation, also calledalgorithmic differentiation
+
+>  numerical differentiation is simple to implement but can be highly inaccurate due to round-offand truncation errors [(Jerrell, 1997)](https://link.springer.com/article/10.1023%2FA%3A1008633613243); more importantly, it scales poorly for gradients
+
+> Symbolic differentiation often results in complex and cryptic expres-sions plagued with the problem of "expression swell" [(Corliss, 1988)](https://www.sciencedirect.com/science/article/pii/B9780125056304500134). Furthermore, manual and symbolic methods require models to be defined as closed-form expressions, ruling out or severely limiting algorithmic control flow and expressivity.
+
+> Automatic differentiation performs a non-standard interpretation of a given computer program by replacing the domain of the variables to incorporate derivative values and redefining the semantics of the operators to propagate derivatives per the chain rule ofdifferential calculus.
+
+> AD as a technical term refers toa specific family of techniques that compute derivatives through accumulation of values during code execution to generate numerical derivative evaluations rather than derivative expressions.
+
+Page 7
+> The O(n) complexity of numerical differentiation for a gradient in n dimensions is the main obstacle to its usefulness in machine learning
+> In contrast, approximation errors would be tolerated in a deep learning settingthanks to the well-documented error resiliency of neural network architectures [(Gupta et al., 2015)](http://proceedings.mlr.press/v37/gupta15.pdf).
+
+Page 12
+> AD in the reverse accumulation model (adjoint or cotangent linear mode) corresponds to a generalized backpropagation algorithm, in that it propagates derivatives backward from a given output.
+> An important advantage of the reverse mode is that it is significantly less costly to evaluate (in terms of operation count) than the forward mode for functions with a large number of inputs.
+
+Page 13
+> In general, for a function $$ f : R^n  \rightarrow R^m $$, reverse mode AD performs better when $$ m \ll n $$[^1].
+
+Page 14
+> Interested readers are highly recommended to read [Griewank(2012)](https://www.math.uni-bielefeld.de/documenta/vol-ismp/52_griewank-andreas-b.pdf) for an investigation ofthe origins of the reverse mode and [Schmidhuber (2015)](https://arxiv.org/abs/1404.7828) for the same for backpropagation.
+
+Page 15
+> The convergence rate of gradient-based methods is usually improved by adaptive step-size techniques that adjust the step size $$ \eta $$ on every iteration ([Duchi et al., 2011](http://stanford.edu/~jduchi/projects/DuchiHaSi10_colt.pdf); [Schaul et al., 2013](https://arxiv.org/abs/1206.1106); [Kingma and Ba, 2015](https://arxiv.org/abs/1412.6980)).
+
+>  [AD provides a way of automaticallycomputing the exact Hessian, enabling succinct and convenient general-purpose implemen-tations.](http://diffsharp.github.io/DiffSharp/examples-newtonsmethod.html)
+
+Page 17
+> the backpropagation algorithm is only a special case of AD: by applying reverse mode AD to an objective function evaluating a network’s error as a function of its weights, we can readily compute the partial derivatives needed for performing weight updates.
+
+Page 18
+> the terms _define-by-run_ and _dynamic computational graph_ refer to the general-purpose AD capability available in newer PyTorch-like systems where a model is a regular program in the host programming language, whose execution dynamically constructs a computational graph on-the-fly that can freely change in each iteration.
+
+
+Page 21
+> A principal consideration in any AD implementation is the performance overhead introduced by the AD arithmetic and bookkeeping.
+
+Page 22
+> Another major issue is the risk of hitting a class of bugs called "perturbation confusion" ([Siskind and Pearlmutter, 2005](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.76.2595); [Manzyuk et al., 2012](https://arxiv.org/abs/1211.4892)). This essentially means that if two ongoing differentiations affect the same piece of code, the two formal epsilons they introduce need to be kept distinct.
+
+>  This is to say that AD is not immune to the perils of floating point arithmetic, and can sometimes introduce numeric issues which were not present in the primal calculation.
+
+Page 23
+> in deep learning lower-precision is sufficient and even desirable in improving computational efficiency, thanks to the error resiliency of neural networks ([Courbariaux et al., 2015](https://arxiv.org/pdf/1511.00363.pdf)).
+
+> One particular area of recent interest is implicit and iterative AD techniques ([Griewank and Walther, 2008](https://dl.acm.org/doi/book/10.5555/1455489)), which has found use in work incorporating constrained optimization within deep learning ([Amos and Kolter, 2017](https://arxiv.org/abs/1703.00443)) and probabilistic graphical models and neural networks ([Johnson et al., 2016](https://papers.nips.cc/paper/6379-composing-graphical-models-with-neural-networks-for-structured-representations-and-fast-inference.pdf)). Another example is checkpointing strategies ([Dauvergne and Hascoet, 2006](https://www-sop.inria.fr/tropics/papers/DauvergneHascoet06.pdf); [Siskind and Pearlmutter, 2017](https://engineering.purdue.edu/~qobi/papers/oms2018.pdf)), which allow balancing of application-specific trade-offs between time and space complexities of reverse mode AD by not storing the full tape of intermediate variables in memory and reconstructing these as needed by re-running parts of the forward computation from intermediate checkpoints. This is highly relevant in deep learning workloads running on GPUs with limited memory budgets. A recent example in this area is the work by [Gruslys et al.(2016)](https://arxiv.org/abs/1606.03401), where the authors construct a checkpointing variety of the backpropagation through time (BPTT) algorithm for recurrent neural networks and demonstrate it saving up to 95% memory usage at the cost of a 33% increase in computation timein one instance.
+
+Page 27
+> Nested AD is highly relevant in hyperparameter optimization as it can effortlessly provide exact hypergradients, that is, derivatives of a training objective with respect to the hyperparameters of an optimization routine ([Maclaurin et al., 2015](http://proceedings.mlr.press/v37/maclaurin15.pdf); [Baydin et al., 2018](https://arxiv.org/abs/1703.04782))
+
+[^1]: [An example of ageneral-purpose AD-based gradient descent routine](http://diffsharp.github.io/DiffSharp/examples-gradientdescent.html)
+
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
